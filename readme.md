@@ -127,7 +127,8 @@ Head of a Boy
 The Market in Dam Square
 ```
 
-##License
+
+## License
 
 Distributed under the Apache 2.0 License. See [LICENSE](https://github.com/LDLucien/dfcx_virtual_museum_guide/blob/master/LICENSE) for more information.
 
