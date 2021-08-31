@@ -108,7 +108,7 @@ For example, replace `https://6fcc-145-100-227-242.ngrok.io/questions` with `htt
 **Caution**: This agent is still at an early stage so it is not able to answer all kinds of questions or utterances. If you want to start over, you could refresh the website or just say "Hi".
 
 Below is the list of exhibits in the virtual museum you could ask to the agent, and the agent will be happy to tell you some background stories of these exhibits.
-```python
+```text
 Two moors
 King Caspar
 Don Miguel de Castro, Emissary of Congo
@@ -126,3 +126,8 @@ Ilona
 Head of a Boy
 The Market in Dam Square
 ```
+
+##License
+
+Distributed under the Apache 2.0 License. See [LICENSE](https://github.com/LDLucien/dfcx_virtual_museum_guide/blob/master/LICENSE) for more information.
+
