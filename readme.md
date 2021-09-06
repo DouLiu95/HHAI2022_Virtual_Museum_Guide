@@ -1,8 +1,11 @@
 # Knowledge Graph Driven Virtual Museum Guide 
-This project aims to use Dialogflow CX to build a knowledge graph driven virtual museum guide. Currently this project can only be run on your local machine if following requirements are satisfied. This will be available online soon. 
+This project aims to use Dialogflow CX to build a knowledge graph driven virtual museum guide. 
+You can try it on a web game demo. Or if you are interested, test it on your own machine is possible.
 
-<img src="/resources/demo.png" alt="Demo" style="height: 1000px; width:1000px;"/>
+
+## Demo
 A web demo can be found [here](https://douliu.itch.io/conversational-virtual-museum-guide?secret=SVwIuE2X8wDBNDXgNgp5Av2h6oo)
+<img src="/resources/demo.png" alt="Demo" style="height: 1000px; width:1000px;"/>
 
 ## Requirement
 - [Neo4j](https://neo4j.com/download/) 4.2+ (To store the knowledge base)
