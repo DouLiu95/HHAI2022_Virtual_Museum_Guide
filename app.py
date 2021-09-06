@@ -3,7 +3,7 @@ from flask import Flask, request, jsonify,render_template
 from graph_database import ArtGraph
 from component.reply_pattern import reply_pattern
 from embedding import get_similarity
-
+import random
 # initialize the flask app
 app = Flask(__name__)
 
@@ -304,9 +304,11 @@ def questions():
             print("preference is",handler.preference)
             question = request.json['text'].replace(originalValue,resolvedValue)
             print('question is :',question)
-            answer = handler.answer_prettify(question)
+            data = handler.classifier.classify(question)
+            print('classified question is:', data)
+            answer = handler.answer_prettify(data)
             print('answer is',answer)
-            response = reply_pattern(answer)
+            response = reply_pattern(answer,type='answer',question_types = data)
             print(response)
             return jsonify(response)
 
@@ -319,10 +321,35 @@ def questions():
                 question = request.json['text'] +' '+ value
                 print('question is :',question)
                 break
-            answer = handler.answer_prettify(question)
+            data = handler.classifier.classify(question)
+            print('classified question is:', data)
+            answer = handler.answer_prettify(data)
             print('answer is',answer)
-            response = reply_pattern(answer)
+            response = reply_pattern(answer,type='answer',question_types = data)
             return jsonify(response)
+    elif tag == "suggest_question" or request.json['fulfillmentInfo']['tag'] == "suggest_question":
+        print("Suggest question mode"+'='*10)
+        if 'parameters' in request.json['sessionInfo']:
+            parameters_dic = request.json['sessionInfo']['parameters']
+            key_para = list(parameters_dic.keys())[0]
+            parameter = parameters_dic[key_para]
+            print("parameter is: ", parameter)
+            # if the parameter here is exhibits or paintings
+            if key_para =='exhibition' or key_para=='paintings':
+                para_type = 'Paintings' # the type name for search
+
+                neighbors_entity_list = handler.get_neighbors(parameter, type=para_type)
+                # properties_list = handler.get_properties(parameter,type=para_type)
+
+                response = reply_pattern(neighbors_entity_list, type='suggest_question', parameter = parameter)
+                print(response)
+                print("Suggest question mode end" + '=' * 10)
+                return jsonify(response)
+            # label_preference = handler.decide_label_preference('suggest_question')
+
+
+
+
 
 @app.route('/recommendation', methods=['GET', 'POST'])
 
@@ -332,7 +359,7 @@ def recommendation():
     key_para = list(parameters_dic.keys())[0]
     parameter = parameters_dic[key_para]
     print("parameter is: ", parameter)
-    label_preference = handler.decide_label_preference()
+    label_preference = handler.decide_label_preference('recommendation')
     print(label_preference)
     suggest_nodeid = get_similarity(parameter,label=label_preference)
 

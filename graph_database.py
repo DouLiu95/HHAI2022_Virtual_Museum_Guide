@@ -167,20 +167,35 @@ class ArtGraph:
         if item in self.Person and self.preference['Person'] <=10:
             self.preference['Person'] +=1
 
-    def decide_label_preference(self):
-        target = random.randint(0,sum(self.preference.values()))
-        sum_ = 0
-        for k, v in self.preference.items():
-            sum_ += v
-            if sum_ >= target:
-                return k
-
+    def decide_label_preference(self,mode):
+        '''
+        :mode: suggest the mode
+        based on the user_peference to choose a label to suggest, in suggest_question mode,
+        the question should be based on the current item.
+        :return: return the label choose randomly
+        '''
+        if mode =='recommendation':
+            target = random.randint(0,sum(self.preference.values()))
+            sum_ = 0
+            for k, v in self.preference.items():
+                sum_ += v
+                if sum_ >= target:
+                    return k
+        elif mode == 'suggest_question':
+            target = random.randint(0, sum(self.preference.values())-self.preference['Exhibit'])
+            sum_ = 0
+            for k, v in self.preference.items():
+                if k == 'Exhibit':
+                    pass
+                else:
+                    sum_ += v
+                    if sum_ >= target:
+                        return k
     def answer_prettify(self, question):
-        data = self.classifier.classify(question)
-        print('classified question is:',data)
+
         try:
 
-            sqls = self.parser.parser_main(data)
+            sqls = self.parser.parser_main(question)
             if not sqls:
                 return None
             else:
@@ -194,6 +209,36 @@ class ArtGraph:
         Return None and then either the ask for clarification or say sorry to the user
         '''
 
+    def get_neighbors(self,name,type='',hop=1):
+        '''
+        Get the neighbor nodes of given node
+        :param name: the name of the given node
+        :param type: the entity type of the given node, could be ignored
+        :param hop: the distance, default = 1
+        :return: list of nodes
+        '''
+        if type != '':
+            type = ':'+type
+        cypher_neighbors = "MATCH (p"+type+ "{name: \""+name+"\"}) CALL apoc.neighbors.athop(p, \"belongsto_GENRE|has_CREATOR|belongsto_MOVEMENT|has_KEYWORD|on_MATERIAL|in_COLLECTION|in_EXHIBITION\", +"+str(hop)+") YIELD node RETURN node"
+        data = self.g.run(str(cypher_neighbors)).data()
+        return data
+
+    def get_properties(self,name,type=""):
+        '''
+
+        :param name:
+        :param type:
+        :return: a list of properties's name
+        '''
+        if type != '':
+            type = ':'+type
+        cypher_properties = "Match (p"+type+"{name:\'"+name+"\'}) return keys(p)"
+        data = self.g.run(str(cypher_properties)).data()
+        return data
+
+
+    # def get_neighbors(self,name):
+
 
 if __name__ == '__main__':
     handler = ArtGraph()
@@ -203,7 +248,8 @@ if __name__ == '__main__':
     data = handler.show_exhibit('Rembrandt')
     print(data)
     print('Done')
-    print(handler.decide_label_preference())
+    print(handler.get_neighbors('The Night Watch'))
+    print(handler.get_properties('The Night Watch'))
 # graph.schema.node_labels
 
 # graph.schema.relationship_types

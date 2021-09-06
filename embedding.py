@@ -21,6 +21,7 @@ def get_similarity(name,label =None):
         embedding['similarity'] = similarity_score
         sorted_df = embedding[((embedding.label == '['+label+']') & (embedding.nodeId != curent_id) )].sort_values("similarity",
                                                                                                            ascending=False)
+        print(sorted_df)
 
         return sorted_df.iloc[0].nodeId
     else:
@@ -36,7 +37,7 @@ def get_similarity(name,label =None):
             similarity_score.append(dist2)
         embedding['similarity'] = similarity_score
         sorted_df = embedding[((embedding.label == label)&(embedding.nodeId != curent_id))].sort_values("similarity",ascending=False)
-        # print(sorted_df)
+        print(sorted_df)
         return sorted_df.iloc[0].nodeId
 
 print(get_similarity(' Hendrik Heerschop',label='Exhibit'))
