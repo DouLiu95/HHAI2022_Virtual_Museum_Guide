@@ -167,20 +167,7 @@ def exhibit():
                                             "subtitle": des,
                                             "actionLink": wiki_uri
                                         }
-                                        # ,
-                                        # {
-                                        #     "type": "chips",
-                                        #     "options": [
-                                        #         {
-                                        #             "text": "Case Studies",
-                                        #             "link": "https://cloud.google.com/dialogflow/case-studies"
-                                        #         },
-                                        #         {
-                                        #             "text": "Docs",
-                                        #             "link": "https://cloud.google.com/dialogflow/docs"
-                                        #         }
-                                        #     ]
-                                        # }
+
                                     ]
                                 ]
                             }
@@ -331,11 +318,12 @@ def questions():
         print("Suggest question mode"+'='*10)
         if 'parameters' in request.json['sessionInfo']:
             parameters_dic = request.json['sessionInfo']['parameters']
-            key_para = list(parameters_dic.keys())[0]
-            parameter = parameters_dic[key_para]
+            key_para = list(parameters_dic.keys())[-1]
+            parameter = parameters_dic[key_para].replace('\n','')
             print("parameter is: ", parameter)
             # if the parameter here is exhibits or paintings
             if key_para =='exhibition' or key_para=='paintings':
+                # print('key para is ',key_para)
                 para_type = 'Paintings' # the type name for search
 
                 neighbors_entity_list = handler.get_neighbors(parameter, type=para_type)
@@ -359,7 +347,10 @@ def recommendation():
     key_para = list(parameters_dic.keys())[0]
     parameter = parameters_dic[key_para]
     print("parameter is: ", parameter)
-    label_preference = handler.decide_label_preference('recommendation')
+    if request.json['text'] == "Show me similar exhibits.":
+        label_preference = 'Exhibit'
+    else:
+        label_preference = handler.decide_label_preference('recommendation')
     print(label_preference)
     suggest_nodeid = get_similarity(parameter,label=label_preference)
 
@@ -369,6 +360,7 @@ def recommendation():
     name = data[0]['n']['name']
     description = data[0]['n']['description']
     uri = data[0]['n']['uri']
+    print("name is {}\n desc is {}\nuri is {}\n".format(name,description,uri))
     try:
         print("with image")
         img = data[0]['n']['img']

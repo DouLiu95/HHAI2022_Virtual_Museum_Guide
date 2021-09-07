@@ -250,6 +250,7 @@ if __name__ == '__main__':
     print('Done')
     print(handler.get_neighbors('The Night Watch'))
     print(handler.get_properties('The Night Watch'))
+    print(handler.get_neighbors("Head of a Boy",type='Paintings'))
 # graph.schema.node_labels
 
 # graph.schema.relationship_types

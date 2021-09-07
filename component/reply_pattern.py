@@ -6,6 +6,7 @@ input: answer from neo4j, a list
 output: a dialogflow reply, json
 '''
 import random
+import re
 def suggest_question_pattern(label,parameter=""):
 
     if label == 'Collection':
@@ -264,21 +265,28 @@ def reply_pattern(answer,type='answer',parameter = "",question_types=''):
                             }
                 return response
     elif type == 'suggest_question':
-        print(answer)
-        target = random.randint(0, len(answer))
+        print("entity list received for suggesting question is :", answer)
+        target = random.randint(0, len(answer)-1)
         label = answer[target]['node'].labels
-        target2 = random.randint(0, len(answer))
+        if str(label).count(':') >1: # deal with multiple label
+
+            label = ':'+random.choice(re.findall(r":([^\s:]+)",str(label)))
+
+        target2 = random.randint(0, len(answer)-1)
         if target2 > len(answer) / 2 or target2 == target:
             label2 = 'date'
         else:
             label2 = answer[target2]['node'].labels
-        # print(label,label2,parameter)
+            label2 = ':' + random.choice(re.findall(r":([^\s:]+)", str(label2)))
+            if label2 == label:
+                label2 = 'date'
+        print('we got label {}, label2 {} and parameter {}'.format(label,label2,parameter))
         pattern1 = suggest_question_pattern(str(label).replace(':','') ,parameter=parameter)
         pattern2 = suggest_question_pattern(str(label2).replace(':',''), parameter=parameter)
         if not pattern1:
-            print('pattern1 error', target. label)
+            print('pattern1 error', target,"\nLabel is", label)
         elif not pattern2:
-            print('pattern2 error', target2. label2)
+            print('pattern2 error', target2, "\nLabel is",label2)
 
         response = {'fulfillment_response':
             {'messages': [

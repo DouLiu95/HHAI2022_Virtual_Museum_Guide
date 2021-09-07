@@ -1,5 +1,6 @@
 import os
 import ahocorasick
+import string
 import re
 class QuestionClassifier:
     def __init__(self):
@@ -116,7 +117,10 @@ class QuestionClassifier:
     '''classify based on the question words'''
 
     def check_words(self, wds, sent):
-        sent_token = sent.split()
+        clean_words = ''.join(' ' if c in string.punctuation else c for c in sent)
+
+
+        sent_token = clean_words.split()
 
         for wd in wds:
             if wd in sent_token:
