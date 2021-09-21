@@ -3,14 +3,17 @@ from flask import Flask, request, jsonify,render_template
 from graph_database import ArtGraph
 from component.reply_pattern import reply_pattern
 from embedding import get_similarity
+from graph_update import draw_graph
+from pyngrok import ngrok,conf
+
 import random
 # initialize the flask app
 app = Flask(__name__)
-
+app.config['TEMPLATES_AUTO_RELOAD'] = True
 # default route
 @app.route('/')
 def index():
-    return render_template("index.html")
+    return render_template("neovis.html")
 
 
 # function for responses
@@ -352,14 +355,17 @@ def recommendation():
     else:
         label_preference = handler.decide_label_preference('recommendation')
     print(label_preference)
-    suggest_nodeid = get_similarity(parameter,label=label_preference)
+    current_nodeid, suggest_nodeid = get_similarity(parameter,label=label_preference)
 
     # handler = ArtGraph()
+    current_data = handler.search_by_nodeId(current_nodeid)
     data = handler.search_by_nodeId(suggest_nodeid)
+    current_uri = current_data[0]['n']['uri']
     print("the data we got is :", data)
     name = data[0]['n']['name']
     description = data[0]['n']['description']
     uri = data[0]['n']['uri']
+    draw_graph(current_uri,uri)
     print("name is {}\n desc is {}\nuri is {}\n".format(name,description,uri))
     try:
         print("with image")
@@ -382,6 +388,16 @@ def recommendation():
                                         "title": name,
                                         "subtitle": description,
                                         "actionLink":uri
+                                    },
+                                    {
+                                        "type": "button",
+                                        "icon": {
+                                            "type": "chevron_right",
+                                            "color": "#FF9800"
+                                        },
+                                        "text": "Knowledge Graph",
+                                        "link": "https://25c7-2a02-a466-ba15-1-985e-cbb1-318-13ae.ngrok.io",
+
                                     }
 
                                 ]
@@ -411,6 +427,16 @@ def recommendation():
                                         "title": name,
                                         "subtitle": description,
                                         "actionLink": uri
+                                    },
+                                    {
+                                        "type": "button",
+                                        "icon": {
+                                            "type": "chevron_right",
+                                            "color": "#FF9800"
+                                        },
+                                        "text": "Knowledge Graph",
+                                        "link": "https://25c7-2a02-a466-ba15-1-985e-cbb1-318-13ae.ngrok.io",
+
                                     }
 
                                 ]
@@ -428,3 +454,5 @@ if __name__ == '__main__':
     handler = ArtGraph()
 
     app.run()
+    # http_tunnel = ngrok.connect("localhost:5000", bind_tls=True)
+    # tunnels = ngrok.get_tunnels()

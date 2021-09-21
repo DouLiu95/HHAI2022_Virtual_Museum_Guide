@@ -41,7 +41,7 @@ def suggest_question_pattern(label,parameter=""):
             "type": "chips",
             "options": [
                 {
-                    "text": "What does " + parameter + " depict?"}
+                    "text": "What is the key element in " + parameter + "?"}
             ]
         }
         return pattern

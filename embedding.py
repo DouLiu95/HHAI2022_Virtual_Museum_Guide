@@ -23,7 +23,7 @@ def get_similarity(name,label =None):
                                                                                                            ascending=False)
         print(sorted_df)
 
-        return sorted_df.iloc[0].nodeId
+        return curent_id, sorted_df.iloc[0].nodeId
     else:
         # if label is not specify, then we return the items with same label
         test = list(embedding[(embedding.name == name)].embedding.item())
@@ -38,6 +38,6 @@ def get_similarity(name,label =None):
         embedding['similarity'] = similarity_score
         sorted_df = embedding[((embedding.label == label)&(embedding.nodeId != curent_id))].sort_values("similarity",ascending=False)
         print(sorted_df)
-        return sorted_df.iloc[0].nodeId
+        return curent_id,sorted_df.iloc[0].nodeId
 
 print(get_similarity(' Hendrik Heerschop',label='Exhibit'))

@@ -14,6 +14,30 @@
   agent-id="6b21725c-c625-42dc-ad10-2ffe08a4f769"
   language-code="en"
 ></df-messenger>
+<script>
+window.addEventListener('dfMessengerLoaded', function (event) {
+  const dfMessenger = document.querySelector('df-messenger');
+  dfMessenger.renderCustomText("Hello! Welcome to the virtual version of Rembrandt House Museum! Nice to meet you, I am your virtual guide.");
+  dfMessenger.renderCustomText("You will visit the exhibition The Blacks in Rembrandt's Time. In case you are the first time here, would you like to know some tips before start the visiting?");
+
+  const payload = [
+
+        {
+        "type": "chips",
+        "options": [
+          {
+            "text": "Show me, please."
+          },
+          {
+            "text": "Skip, thank you."
+          }
+        ]
+      }
+  ];
+dfMessenger.renderCustomCard(payload);
+});
+
+</script>`
 
 <body>
 Hello world!
