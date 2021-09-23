@@ -257,8 +257,9 @@ def exhibit():
                             "richContent": [
                             [
                               {
-                                "type": "description",
+                                "type": "accordion",
                                 "title": name,
+                                "subtitle": "Background story of {}".format(name),
                                 "text": story
                               }
                             ]
@@ -365,7 +366,8 @@ def recommendation():
     name = data[0]['n']['name']
     description = data[0]['n']['description']
     uri = data[0]['n']['uri']
-    draw_graph(current_uri,uri)
+    query_for_graph = draw_graph(current_uri,uri)
+    # handler.
     print("name is {}\n desc is {}\nuri is {}\n".format(name,description,uri))
     try:
         print("with image")

@@ -51,7 +51,7 @@ def draw_graph(uri1, uri2):
                             "caption":"name",
                             "size": "sitelink"
                         },
-                        "Matetiral": {
+                        "Material": {
                             "caption":"name",
                             "size": "sitelink"
                         },
@@ -174,5 +174,5 @@ def draw_graph(uri1, uri2):
     print(new_html)
     with open("templates/neovis.html", "w") as file:
         file.write(new_html)
-
+    return new_query
 # draw_graph("MATCH (a:Paintings {name: 'The Night Watch'}), (b:Paintings {name: 'Two moors'}), p = shortestPath((a)-[*]-(b)) RETURN p")
