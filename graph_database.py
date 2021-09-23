@@ -248,9 +248,8 @@ if __name__ == '__main__':
     data = handler.show_exhibit('Rembrandt')
     print(data)
     print('Done')
-    print(handler.get_neighbors('The Night Watch'))
-    print(handler.get_properties('The Night Watch'))
-    print(handler.get_neighbors("Head of a Boy",type='Paintings'))
+    data1 = handler.g.run("MATCH (a {name: 'The Night Watch'}), (b {name: 'Two moors'}), p = (a)-[:belongsto_GENRE|has_CREATOR|belongsto_MOVEMENT|has_KEYWORD|on_MATERIAL|in_COLLECTION|in_EXHIBITION1*1..3]-(b) RETURN p as path, NODES(p) as nodes,relationships(p) as rel").data()
+    print(data1)
 # graph.schema.node_labels
 
 # graph.schema.relationship_types
