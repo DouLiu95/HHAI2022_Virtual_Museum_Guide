@@ -156,7 +156,7 @@ class QuestionPaser:
                    for i in entities]
 
         elif question_type == 'collection_description':
-            sql = ["MATCH (p:Collection) where p.name ='{0}' RETURN p.website ".format(i)
+            sql = ["MATCH (p:Collection) where p.name ='{0}' RETURN p.description ".format(i)
                    for i in entities]
 
         elif question_type == 'genre_paintings':
@@ -168,6 +168,6 @@ class QuestionPaser:
                    for i in entities]
 
         elif question_type == 'creator_description':
-            sql = ["MATCH (p:Person) where p.name ='{0}' RETURN p.uri ".format(i)
+            sql = ["MATCH (p:Person) where p.name ='{0}' RETURN p.description ".format(i)
                    for i in entities]
         return sql

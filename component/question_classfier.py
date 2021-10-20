@@ -47,7 +47,7 @@ class QuestionClassifier:
         self.exhibition_qwds = ['exhibition']
         self.movement_qwds = ['movement']
         self.paintings_qwds = ['painting','draw','drawing','paint','artwork','work','paintings']
-        self.description_qwds = ['describe','description','website','web','web page','webpage','page']
+        self.description_qwds = ['describe','description','website','web','web page','webpage','page', 'tell me']
         self.creator_qwds = ['creator','who','Who']
         self.coordinate_qwds = ['coordinate','map','specific location','location','located']
         self.size_qwds = ['size','how much','How many','How much','how many']
@@ -231,13 +231,13 @@ class QuestionClassifier:
             question_type = 'depicts_paintings'
             question_types.append(question_type)
         # no extra information, return the description
-        if question_types == [] and 'paintings' in types:
+        if (question_types == [] and 'paintings' in types) or (self.check_words(self.description_qwds, question) and ('paintings' in types)):
             question_types = ['paintings_description']
 
-        if question_types == [] and 'collection' in types:
+        if (question_types == [] and 'collection' in types) or (self.check_words(self.description_qwds, question) and ('collection' in types)):
             question_types = ['collection_description']
 
-        if question_types == [] and 'creator' in types:
+        if (question_types == [] and 'creator' in types) or (self.check_words(self.description_qwds, question) and ('creator' in types)):
             question_types = ['creator_description']
 
         # 将多个分类结果进行合并处理，组装成一个字典

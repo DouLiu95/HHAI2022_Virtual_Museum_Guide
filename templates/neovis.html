@@ -49,7 +49,7 @@
                             "caption":"name",
                             "size": "sitelink"
                         },
-                        "Matetiral": {
+                        "Material": {
                             "caption":"name",
                             "size": "sitelink"
                         },
@@ -123,7 +123,7 @@
                             "caption":false
                         }
                     },
-                    initial_cypher: "MATCH (a {uri: 'http://www.wikidata.org/entity/Q17276026'}), (b {uri: 'http://www.wikidata.org/entity/Q17276109'}), p = (a)-[:belongsto_GENRE|has_CREATOR|belongsto_MOVEMENT|has_KEYWORD|on_MATERIAL|in_COLLECTION|in_EXHIBITION1*1..3]-(b) RETURN p"
+                    initial_cypher: "MATCH (a {uri: 'https://www.wikidata.org/wiki/Q926302'}), (b {uri: 'https://www.wikidata.org/wiki/Q98227966'}), p = (a)-[r:belongsto_GENRE|has_CREATOR|belongsto_MOVEMENT|has_KEYWORD|on_MATERIAL|in_COLLECTION|in_EXHIBITION1*1..3]-(b) RETURN p"
                 };
     
                 viz = new NeoVis.default(config);

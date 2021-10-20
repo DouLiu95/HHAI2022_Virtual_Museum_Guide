@@ -1,5 +1,5 @@
 
-def draw_graph(uri1, uri2):
+def draw_graph(uri1='', uri2='', new_query = ''):
     html = '''<html>
     <head>
         <title>Neovis.js Simple Example</title>
@@ -168,11 +168,18 @@ def draw_graph(uri1, uri2):
     </script>
     </html>
     '''
-    new_query = "MATCH (a {uri: '"+uri1+"'}), (b {uri: '"+uri2+"'}), p = (a)-[:belongsto_GENRE|has_CREATOR|belongsto_MOVEMENT|has_KEYWORD|on_MATERIAL|in_COLLECTION|in_EXHIBITION1*1..3]-(b) RETURN p"  # test usage
+    if new_query == '':
+        new_query = "MATCH (a {uri: '"+uri1+"'}), (b {uri: '"+uri2+"'}), p = (a)-[r:belongsto_GENRE|has_CREATOR|belongsto_MOVEMENT|has_KEYWORD|on_MATERIAL|in_COLLECTION|in_EXHIBITION1*1..3]-(b) RETURN p"  # test usage
 
-    new_html = html.replace("initial_cypher:", "initial_cypher: \"" + new_query + "\"")
-    print(new_html)
-    with open("templates/neovis.html", "w") as file:
-        file.write(new_html)
-    return new_query
+        new_html = html.replace("initial_cypher:", "initial_cypher: \"" + new_query + "\"")
+        # print(new_html)
+        with open("templates/neovis.html", "w") as file:
+            file.write(new_html)
+        return new_query
+    else:
+        new_html = html.replace("initial_cypher:", "initial_cypher: \"" + new_query + "\"")
+        # print(new_html)
+        with open("templates/neovis.html", "w") as file:
+            file.write(new_html)
+        return new_query
 # draw_graph("MATCH (a:Paintings {name: 'The Night Watch'}), (b:Paintings {name: 'Two moors'}), p = shortestPath((a)-[*]-(b)) RETURN p")
