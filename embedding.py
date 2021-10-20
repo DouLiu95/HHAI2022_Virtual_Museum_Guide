@@ -42,7 +42,7 @@ def get_similarity(name,label =None):
         similarity_score = []
         for index, row in embedding.iterrows():
             Vec = np.vstack([test, row.embedding])
-            dist2 = pdist(Vec, 'cosine')
+            dist2 = 1 - pdist(Vec, 'cosine')
             similarity_score.append(dist2)
         embedding['similarity'] = similarity_score
         sorted_df = embedding[((embedding.label == label)&(embedding.nodeId != curent_id))].sort_values("similarity",ascending=False)
