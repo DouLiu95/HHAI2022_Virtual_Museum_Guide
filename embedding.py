@@ -5,6 +5,15 @@ from scipy.spatial.distance import pdist
 def get_similarity(name,label =None):
     embedding = pd.read_csv("component/export.csv")
     embedding = embedding[((embedding.label != '[]')&(embedding.embedding!='[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]'))]
+    if exception_list:
+        for i in exception_list:
+            if i != []:
+                if isinstance(i,list):
+                    for item in i:
+                        embedding = embedding[(embedding.name != item)]
+                elif isinstance(i,str):
+                    embedding = embedding[(embedding.name != i)]
+
     name = name.strip()
     embedding['embedding'] = embedding.apply(lambda row : eval(row['embedding']), axis = 1)
     if label:
@@ -33,7 +42,7 @@ def get_similarity(name,label =None):
         similarity_score = []
         for index, row in embedding.iterrows():
             Vec = np.vstack([test, row.embedding])
-            dist2 = 1 - pdist(Vec, 'cosine')
+            dist2 = pdist(Vec, 'cosine')
             similarity_score.append(dist2)
         embedding['similarity'] = similarity_score
         sorted_df = embedding[((embedding.label == label)&(embedding.nodeId != curent_id))].sort_values("similarity",ascending=False)
