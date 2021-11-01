@@ -5,6 +5,7 @@ from component.reply_pattern import reply_pattern,connection_pattern
 from embedding import get_similarity
 from graph_update import draw_graph
 import pandas as pd
+import random
 # initialize the flask app
 app = Flask(__name__)
 app.config['TEMPLATES_AUTO_RELOAD'] = True
@@ -388,7 +389,7 @@ def recommendation():
         for intent in reversed(previous_):
             if count>=3:
                 return True
-            elif 'recommendation.toomuch.negetive' in intent or 'recommendation.toomuch.positive' in intent:
+            elif 'recommendation.toomuch.negetive' in intent or 'recommendation.toomuch.positive' in intent or 'recommendation' not in intent:
                 print('the count for recommendation is', count)
                 return False
             elif intent == 'recommendation' or intent == 'recommendation.attributes' or intent == 'recommendation.new':
@@ -411,7 +412,7 @@ def recommendation():
                     #     'text': 'It seems you have check several recommendations. Would you like to check the exhibits in this virtual museum?'},
                     {'payload':
                         {'richContent': [[{'type':'info',
-                                           'title': 'Reminder',
+                                           'title': 'Oops',
                                            'subtitle':'It seems that you have spent some time on the recommendations. Would you like to discover more exhibits in this virtual museum?'},
                             {"type": "chips",
                              "options": [{"text": 'Yes, stop the recommendation'},
@@ -620,7 +621,7 @@ def recommendation():
                                                 "color": "#FF9800"
                                             },
                                             "text": "Click to check the Knowledge Graph",
-                                            "link": "https://9d87-145-100-224-29.ngrok.io",
+                                            "link": "https://4465-145-100-225-191.ngrok.io",
 
                                         })
             fulfillmentResponse = {

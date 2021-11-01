@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics.pairwise import cosine_similarity
 from scipy.spatial.distance import pdist
-def get_similarity(name,label =None):
+def get_similarity(name,exception_list,label =None):
     embedding = pd.read_csv("component/export.csv")
     embedding = embedding[((embedding.label != '[]')&(embedding.embedding!='[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]'))]
     if exception_list:
@@ -49,4 +49,4 @@ def get_similarity(name,label =None):
         print(sorted_df)
         return curent_id,sorted_df.iloc[0].nodeId
 
-print(get_similarity(' Hendrik Heerschop',label='Exhibit'))
+# print(get_similarity(' Hendrik Heerschop',label='Exhibit'))
