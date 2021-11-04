@@ -5,6 +5,7 @@ from scipy.spatial.distance import pdist
 def get_similarity(name,exception_list,label =None):
     embedding = pd.read_csv("component/export.csv")
     embedding = embedding[((embedding.label != '[]')&(embedding.embedding!='[0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0]'))]
+    print("these painting is excluded: ",exception_list)
     if exception_list:
         for i in exception_list:
             if i != []:
@@ -20,23 +21,35 @@ def get_similarity(name,exception_list,label =None):
         if label == 'Exhibit':
             label = 'Paintings'
         # if label is specify, then we return the items of that kind of label
-        test = list(embedding[(embedding.name == name)].embedding)
-        curent_id = int(embedding[(embedding.name == name)].nodeId)
+        # test = list(embedding[(embedding.name == name)].embedding)
+        # print(embedding[(embedding.name == name)])
+        try:
+            curent_id = int(embedding[(embedding.name == name)].nodeId)
+            test = list(embedding[(embedding.name == name)].embedding)
+        except:
+            curent_id = int(embedding[(embedding.name == name)].iloc[0].nodeId)
+            test = list(embedding[(embedding.name == name)].iloc[0].embedding)
+        print(curent_id)
         similarity_score = []
         for index, row in embedding.iterrows():
             Vec = np.vstack([test, row.embedding])
             dist2 = 1 -pdist(Vec, 'cosine')
             similarity_score.append(dist2)
         embedding['similarity'] = similarity_score
-        sorted_df = embedding[((embedding.label == '['+label+']') & (embedding.nodeId != curent_id) )].sort_values("similarity",
-                                                                                                           ascending=False)
+        print(embedding[((embedding.label == '['+label+']') & (embedding.nodeId != curent_id) )])
+
+        sorted_df = embedding[((embedding.label == '['+label+']') & (embedding.nodeId != curent_id) )].sort_values(by ="similarity",ascending=False)
         print(sorted_df)
 
         return curent_id, sorted_df.iloc[0].nodeId
     else:
         # if label is not specify, then we return the items with same label
-        test = list(embedding[(embedding.name == name)].embedding.item())
-        curent_id = int(embedding[(embedding.name == name)].nodeId.item())
+        try:
+            curent_id = int(embedding[(embedding.name == name)].nodeId)
+            test = list(embedding[(embedding.name == name)].embedding)
+        except:
+            curent_id = int(embedding[(embedding.name == name)].iloc[0].nodeId)
+            test = list(embedding[(embedding.name == name)].iloc[0].embedding)
         label = embedding[(embedding.name == name)].label.item()
         print('label is', label)
         similarity_score = []

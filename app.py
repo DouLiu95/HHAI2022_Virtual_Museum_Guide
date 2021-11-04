@@ -584,7 +584,7 @@ def recommendation():
         handler.transfer_request_to_dict(request.json,last_entity)
         print("query_data is",query_data)
         pattern_list,relationship_dic = connection_pattern(query_data)
-        if query_data == []: # there is no such graph
+        if query_data == [] or pattern_list == []: # there is no such graph
             print('the query data is empty')
             fulfillmentResponse = {
                 'fulfillment_response': {
@@ -681,17 +681,17 @@ def recommendation():
             fulfillmentResponse = {
                 'fulfillment_response': {
                     'messages': [
-                        [{
+
+                        {'payload':
+                            {'richContent': [[{
                                         "type": "info",
                                         "title": 'Not Found',
-                                        "subtitle": "Sorry, after searching in our knowledge graph, these two items do not share a common attributes. "
+                                        "subtitle": "Sorry, after searching in our knowledge base, there is no pianting with this attribute. Click \"another one\" to find a new recommendation."
 
                                     },
-                        {'payload':
-                            {'richContent': [[
                                 {"type": "chips",
                                  "options": [{"text":'Another one'},{"text":'Stop recommendation'}]}]]}}
-                    ]]
+                    ]
                 },
             }
             return jsonify(fulfillmentResponse)
@@ -755,7 +755,7 @@ def recommendation():
         unchecked_exhibits = handler.history[handler.history['sessionInfo.session'].isin([session])].iloc[-1][
             'exhibit_unchecked']  # here we record the previous recommended items
         handler.transfer_request_to_dict(request.json, '')
-        if len(unchecked_exhibits) >=3:
+        if len(unchecked_exhibits) >=8:
             slice = random.sample(unchecked_exhibits,3)
             print(slice)
             fulfillmentResponse = {
@@ -778,25 +778,50 @@ def recommendation():
             return jsonify(fulfillmentResponse)
         else:
             options = []
-            for i in unchecked_exhibits:
-                options.append({'text': i})
-            fulfillmentResponse = {
-                'fulfillment_response': {
-                    'messages': [{
-                        'payload':
-                            {
-                                "richContent": [
-                                    [
-                                        {"type": "chips",
-                                         "options": options}]
-                                ]
-                            }
+            if len(unchecked_exhibits) >= 3:
+                slice = random.sample(unchecked_exhibits, 3)
+                fulfillmentResponse = {
+                    'fulfillment_response': {
+                        'messages': [{
+                            'payload':
+                                {
+                                    "richContent": [
+                                        [
+                                            {"type": "chips",
+                                             "options": [{'text': slice[0].split(',')[0].split(': ')[0]},
+                                                         {"text": slice[1].split(',')[0].split(': ')[0]},
+                                                         {'text': slice[2].split(',')[0].split(': ')[0]},
+                                                         {'text':'Finish the visiting'}]}]
+                                    ]
+                                }
 
-                    }
-                    ]
-                },
-            }
-            return jsonify(fulfillmentResponse)
+                        }
+                        ]
+                    },
+                }
+                return jsonify(fulfillmentResponse)
+            else:
+
+                for i in unchecked_exhibits:
+                    options.append({'text': i})
+                options.append({'text':'Finish the visiting'})
+                fulfillmentResponse = {
+                    'fulfillment_response': {
+                        'messages': [{
+                            'payload':
+                                {
+                                    "richContent": [
+                                        [
+                                            {"type": "chips",
+                                             "options": options}]
+                                    ]
+                                }
+
+                        }
+                        ]
+                    },
+                }
+                return jsonify(fulfillmentResponse)
     elif tag == 'end':
         session = request.json['sessionInfo']['session'].split('/')[-1]
         checked_exhibits = handler.history[handler.history['sessionInfo.session'].isin([session])].iloc[-1][
@@ -860,6 +885,8 @@ def recommendation():
                 ]
             },
         }
+        history = pd.read_csv('history.csv')
+        history.to_csv(r'user_evaluation\\'+session+".csv")
         return jsonify(fulfillmentResponse)
 
 
