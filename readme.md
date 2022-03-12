@@ -5,7 +5,7 @@ You can try it on a web game demo. Or if you are interested, test it on your own
 
 ## Demo
 A web demo can be found [here](https://douliu.itch.io/conversational-virtual-museum-guide?secret=SVwIuE2X8wDBNDXgNgp5Av2h6oo)
-<img src="/resources/demo.png" alt="Demo" style="height: 1000px; width:1000px;"/>
+<img src="/resources/demo_web.jpg" alt="Demo" style="height: 1000px; width:1700px;"/>
 
 ## Requirement
 - [Neo4j](https://neo4j.com/download/) 4.2+ (To store the knowledge base)
