@@ -1,4 +1,4 @@
-# Knowledge Graph Driven Virtual Museum Guide 
+# HHAI2022 Knowledge Graph Driven Virtual Museum Guide 
 This project aims to use Dialogflow CX to build a knowledge graph driven virtual museum guide. 
 You can try it on a web game demo. Or if you are interested, test it on your own machine is possible.
 
