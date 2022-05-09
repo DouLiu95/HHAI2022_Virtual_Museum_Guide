@@ -34,9 +34,11 @@
             function draw() {
                 var config = {
                     container_id: "viz",
-                    server_url: "bolt://localhost:7687",
+                    server_url: "neo4j://fc932d9f.databases.neo4j.io",
                     server_user: "neo4j",
-                    server_password: "000000",
+                    server_password: "96_p-Cgxbgbm9RNJxNwC_Yq3tVbEBeD4uhfZNF5DWyw",
+                    encrypted:'ENCRYPTION_ON',
+                    trust:'TRUST_SYSTEM_CA_SIGNED_CERTIFICATES',
                     labels: {
                         //"Character": "name",
                         "Paintings": {
@@ -123,7 +125,15 @@
                             "caption":false
                         }
                     },
-                    initial_cypher: "MATCH (a {uri: 'Man in a Turban'}), (b {uri: ''}), p = (a)-[r:belongsto_GENRE|has_CREATOR|belongsto_MOVEMENT|has_KEYWORD|on_MATERIAL|in_COLLECTION|in_EXHIBITION1*1..3]-(b) RETURN p"
+                    initial_cypher: "
+        MATCH (n) where n.name IN ['Head of a Boy', 'Head of a Boy in a Turban', 'King Caspar', 'Don Miguel de Castro, Emissary of Congo', 'Diego Bemba, a Servant of Don Miguel de Castro', 'A Young Man Wearing a Turban', 'Portrait of Manuel Garc¨ªa de la Prada', 'The Clothed Maja', 'Don Miguel de Castro, Emissary of Congo', 'Diego Bemba, a Servant of Don Miguel de Castro', 'King Caspar', 'turban', 'oil paint', 'Head of a Boy']
+        WITH collect(n) as nodes
+        UNWIND nodes as n
+        UNWIND nodes as m
+        WITH * WHERE id(n) < id(m)
+        MATCH path = allShortestPaths( (n)-[*..2]-(m) )
+        RETURN path
+        "
                 };
     
                 viz = new NeoVis.default(config);

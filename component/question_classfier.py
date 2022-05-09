@@ -142,6 +142,12 @@ class QuestionClassifier:
         question_type = 'others'
         print("types from classify are:", types)
         question_types = []
+        for key_ in art_dict.keys():
+            if key_.startswith('Q'):
+                new_key = r"http://www.wikidata.org/entity/" + key_
+                art_dict[new_key] = art_dict.pop(key_)
+
+
 
         '''painting's basic information'''
 

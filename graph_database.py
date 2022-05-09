@@ -6,7 +6,7 @@ import pandas as pd
 class ArtGraph:
     def __init__(self):
         self.g = Graph(
-            scheme="bolt",
+            scheme="neo4j",
             host="localhost",
             port=7687,
             auth=("neo4j", "000000"))

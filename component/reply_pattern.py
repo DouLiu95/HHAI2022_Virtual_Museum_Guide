@@ -306,6 +306,7 @@ def reply_pattern(answer,type='answer',parameter = "",question_types=''):
             template_response['fulfillment_response']['messages'][0]['payload']['richContent'][0].append(suggest)
             return template_response
         # here we assume there is only one element in the list
+        print("Check here ====================================")
         for key, value in answer[0].items():
             if value == 'None':
                 response = {'fulfillment_response':

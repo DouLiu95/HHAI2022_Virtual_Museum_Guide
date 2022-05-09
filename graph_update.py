@@ -36,9 +36,11 @@ def draw_graph(uri1='', uri2='', new_query = ''):
             function draw() {
                 var config = {
                     container_id: "viz",
-                    server_url: "bolt://localhost:7687",
+                    server_url: "neo4j://fc932d9f.databases.neo4j.io",
                     server_user: "neo4j",
-                    server_password: "000000",
+                    server_password: "96_p-Cgxbgbm9RNJxNwC_Yq3tVbEBeD4uhfZNF5DWyw",
+                    encrypted:'ENCRYPTION_ON',
+                    trust:'TRUST_SYSTEM_CA_SIGNED_CERTIFICATES',
                     labels: {
                         //"Character": "name",
                         "Paintings": {
