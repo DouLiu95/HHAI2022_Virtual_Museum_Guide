@@ -4,7 +4,7 @@ import string
 import re
 class QuestionClassifier:
     def __init__(self):
-        cur_dir = '/'.join(os.path.abspath(__file__).split('/')[:-1])
+        cur_dir = '/'.join(os.path.abspath(__file__).split('/')[:-2])
         #　path for the keywords
         self.collection_path = os.path.join(cur_dir, 'dict/Collection.txt')
         self.country_path = os.path.join(cur_dir, 'dict/Country.txt')
