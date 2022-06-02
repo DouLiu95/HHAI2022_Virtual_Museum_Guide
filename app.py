@@ -1421,10 +1421,11 @@ def recommendation():
 
 
 # run the app
+handler = ArtGraph()
+handler_es = graph_database_es.ArtGraph()
 if __name__ == '__main__':
     # model = user_model()
-    handler = ArtGraph()
-    handler_es = graph_database_es.ArtGraph()
-    app.run()
+
+    app.run(host='0.0.0.0', port=5000)
     # http_tunnel = ngrok.connect("localhost:5000", bind_tls=True)
     # tunnels = ngrok.get_tunnels()
