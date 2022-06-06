@@ -967,7 +967,8 @@ def recommendation():
 
         # here we record the last intent parameter as current entity, which is the entity user searched
         current_entity =  handler.history[handler.history['sessionInfo.session'].isin([session])]['intentInfo.parameters.resolvedValue'].to_list()
-        print("current is ",current_entity)
+        print("current is ",current_entity) # !!!!this could be empty!!!! how to solve
+
         for i in reversed(current_entity):
             if isinstance(i,list):
                 parameter = i[0].replace('\n','')

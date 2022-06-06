@@ -89,7 +89,7 @@ class ArtGraph:
                                     'sessionInfo.parameters.value',
                                     'fulfillmentInfo.tag', 'text',
                                     'response.entity','exhibit_checked','exhibit_unchecked','preference','Cypher'])
-
+        # self.history = pd.read_csv('history.csv')
         self.preference_list = ['Paintings','Keyword','Genre','Material','Collection','Person','Exhibition','Movement']
 
     def build_nodes(self):
@@ -192,6 +192,7 @@ class ArtGraph:
         :param item_preference: the item user checked that should have impact preference, string
         :return:
         '''
+        self.history = pd.read_csv('history.csv')
         print("=" * 10 + 'item_preference and returned_entity' + "=" * 10)
         print("item_preference is {}, returned_entity is {}".format(item_preference, returned_entity))
         d = {}

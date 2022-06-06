@@ -191,6 +191,7 @@ class ArtGraph:
         :param item_preference: the item user checked that should have impact preference, string
         :return:
         '''
+        self.history = pd.read_csv('history.csv')
         print("=" * 10 + 'item_preference and returned_entity' + "=" * 10)
         print("item_preference is {}, returned_entity is {}".format(item_preference, returned_entity))
         d = {}
