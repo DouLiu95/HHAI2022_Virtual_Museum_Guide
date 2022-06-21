@@ -5,12 +5,12 @@ import random
 import pandas as pd
 class ArtGraph:
     def __init__(self):
-        # self.g = Graph(
-        #     scheme="neo4j",
-        #     host="localhost",
-        #     port=7687,
-        #     auth=("neo4j", "000000"))
-        self.g = Graph("neo4j+ssc://bda6cbfc.databases.neo4j.io", auth=("neo4j", "1nNlEWXcOmHfyRAJupBjyhoc5aGAJu-OOP2YqcWh62o"))
+        self.g = Graph(
+            scheme="neo4j",
+            host="localhost",
+            port=7687,
+            auth=("neo4j", "000000"))
+        # self.g = Graph("neo4j+s://bda6cbfc.databases.neo4j.io", auth=("neo4j", "1nNlEWXcOmHfyRAJupBjyhoc5aGAJu-OOP2YqcWh62o"),routing=True)
         # self.g = GraphDatabase.driver("neo4j+s://bda6cbfc.databases.neo4j.io", auth=("neo4j", "1nNlEWXcOmHfyRAJupBjyhoc5aGAJu-OOP2YqcWh62o"))
         self.node_name_list = ['Paintings','Keyword','Country','Genre','Material','Collection','Person','Exhibition','Movement','City']
         self.Paintings = []
