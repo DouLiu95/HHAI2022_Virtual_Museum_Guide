@@ -34,12 +34,23 @@ def results():
 
 @app.route('/bot4museum',methods=['POST'])
 def bot4museum():
+    '''
+    this method is based on the request from dialogflow es
+    and for the bot in VR version
+
+    argument: json data from dialogflow es
+    return:　response in the form of dialogflow es json response
+
+    '''
+
     req = request.get_json()
     print("request is ",req)
     intent = req["queryResult"]["intent"]["displayName"]
     action = req["queryResult"]["action"]
     session = req['session']
-    print("="*15+'New Input' + '=*15')
+    embedding = pd.read_csv("component/export.csv")
+
+    print("="*15+'New Input' + '='*15)
     print("The intent is", intent, "\n The action is ", action)
     # deal with asking for a painting
     if intent == 'description.painting':
@@ -53,6 +64,8 @@ def bot4museum():
             print("Now is looking for: ", entity_uri)
             if entity_uri.startswith('Q'):
                 entity_full_uri = r"http://www.wikidata.org/entity/" + entity_uri
+            elif entity_uri.endswith('exhibit'):
+                entity_full_uri = str(entity_uri)
             print("Now is looking for: ", entity_uri)
             handler_es.transfer_request_to_dict(req, returned_entity =entity_full_uri)
 
@@ -346,7 +359,10 @@ def bot4museum():
         #     return jsonify(response)
 
     elif intent == 'question.example' or intent == 'question.another':
-        print("Suggest question mode" + '=' * 10)
+        '''
+        Show example questions to the user
+        '''
+        print('=' * 10 + "Suggest question mode" + '=' * 10)
         current_entity = handler_es.history[handler_es.history['session'].isin([session])][
             'parameters'].to_list()
         print("current is ", current_entity)
@@ -388,10 +404,11 @@ def bot4museum():
             return fulfillmentResponse
 
     elif intent == 'question.attribute' :
-        # here is to find another paintings with the same attributes
+        '''
+        here is to find another paintings with the same attributes
+        '''
         # exception_list = handler_es.history[handler_es.history['session'].isin([session])][
         #     'response.entity'].to_list()  # here we record the previous recommended items
-        embedding = pd.read_csv("component/export.csv")
         response_list = handler_es.history[handler_es.history['session'].isin([session])][
             'response.entity'].to_list()  # here we record the previous recommended items
         response = []
@@ -428,6 +445,8 @@ def bot4museum():
         # here add the prefix of the URI
         if parameter.startswith('Q'):
             parameter = r"http://www.wikidata.org/entity/" + parameter
+        elif parameter.endswith('exhibit'):
+            parameter = str(parameter)
         parameter_name = embedding[embedding['uri'] == parameter]['name'].values[0]
         query = "MATCH (a),  (a)-[]-(b{uri:'" + parameter + "'}) where NOT  a.uri  in" + str(
             exception) + "  RETURN a limit 1"
@@ -554,8 +573,8 @@ def bot4museum():
                 object_list_text.append({"text": obj})
             object_list_text.append({"text": 'Another one'})
             object_list_text.append({"text": 'Stop recommendation'})
-            # pattern_list[-1][
-            #     'subtitle'] = 'Select a option below to check other paintings with the listed attribute or stop the recommendation.'
+            pattern_list[-1][
+                'subtitle'] = 'Select a option below to check other paintings with the listed attribute or stop the recommendation.'
             #
             # pattern_list.append({
             #     "type": "button",
@@ -567,30 +586,154 @@ def bot4museum():
             #     "link": "", # address of api
             #
             # })
-            fulfillmentResponse = { 'fulfillmentMessages': [pattern_list,
-                                                            {
-                                                                "text": {
-                                                                    "text": [
-                                                                        'Select an option here to check other paintings with the listed attribute or stop the recommendation.'
+            fulfillmentResponse = { 'fulfillmentMessages':[{
 
-                                                                    ]
-                                                                }
-                                                            },
-                                                            {
                         'payload':
                             {
                                 "richContent": [
+                                    pattern_list,
+                                     # {
+                                     #     "text": {
+                                     #         "text": [
+                                     #             'Select an option here to check other paintings with the listed attribute or stop the recommendation.'
+                                     #
+                                     #         ]
+                                     #     }
+                                     # },
 
-                                    [
-                                        {"type": "chips",
+
+                                        [{"type": "chips",
                                          "options": object_list_text}]
-
                                 ]
+
+
                             }
 
-                    }
+                    }]
+
+                }
+            return fulfillmentResponse
+
+    elif intent == 'recommend.connection - attribute':
+        # here is to find another paintings with the same attributes
+        exception_list = handler_es.history[handler_es.history['session'].isin([session])][
+            'response.entity'].to_list()  # here we record the previous recommended items
+
+        exception = []
+        for l in exception_list:
+            if isinstance(l, list):
+                exception.extend(l)
+        exception = list(set(exception))
+        parameters_dic = req['queryResult']['parameters']
+
+        key_para = [key for key in parameters_dic.keys() if parameters_dic[key] != '']
+
+        parameter_list = [parameters_dic[key] for key in parameters_dic.keys() if parameters_dic[key] != '']
+        print('parameter_list here is', parameter_list)
+        if len(parameter_list) == 0:
+
+            parameter_list = handler.history[handler.history['session'].isin([session])][
+                'parameters'].to_list()
+            key_list = handler.history[handler.history['session'].isin([session])][
+                'parameters_dic'].to_list()
+            for i, j in zip(reversed(parameter_list), reversed(key_list)):
+                print(i, j)
+                if not pd.isna(i):
+                    parameter = i[0].replace('\n', '')
+                    key = list(j)[-1]
+                    break
+        else:
+            parameter = parameter_list[0]
+            key = key_para[0]
+        # here add the prefix of the URI
+        if parameter.startswith('Q'):
+            parameter = r"http://www.wikidata.org/entity/" + parameter
+        elif parameter.endswith('exhibit'):
+            parameter = str(parameter)
+        parameter_name = embedding[embedding['uri'] == parameter]['name'].values[0]
+        # query = "MATCH (a),  (a)-[]-(b{name:'"+parameter+"'}) RETURN a limit 1"
+        query = "MATCH (a),  (a)-[]-(b{name:'" + parameter_name + "'}) where NOT  a.uri  in" + str(
+            exception) + "  RETURN a limit 1"
+        data = handler_es.g.run(query).data()
+
+        if data == []:  # there is no such graph
+            handler_es.transfer_request_to_dict(request.json, parameter, Cypher=query)
+            fulfillmentResponse = {'fulfillmentMessages': [{
+                'payload':
+                    {
+                        "richContent": [[{
+                            "type": "info",
+                            "title": 'Not Found',
+                            "subtitle": "Unfortunately, after searching in our knowledge graph, these two items do not share a common attributes. "
+
+                        },
+                            {"type": "chips",
+                             "options": [{"text": 'Another one'}, {"text": 'Stop recommendation'}]}]]}}
+            ]
+            }
+            return fulfillmentResponse
+
+        else:
+            name = data[0]['a']['name']
+            des = data[0]['a']['description']
+            uri = data[0]['a']['uri']
+            handler_es.transfer_request_to_dict(request.json, parameter, name, Cypher=query)
+
+            try:
+                img = data[0]['a']['img']
+            except:
+                print("no image for ", name)
+                img = ''
+
+            def attribute_to_text(key, parameter):
+                if key == 'genre':
+                    text = 'It also has ' + parameter + ' as its genre.'
+                elif key == 'material':
+                    text = 'It also has ' + parameter + ' as its material.'
+                elif key == 'movement':
+                    text = 'It also belongs to the movement ' + parameter
+                elif key == 'keyword':
+                    text = 'It also depicts ' + parameter
+                elif key == 'collection':
+                    text = 'It is also in the ' + parameter
+                elif key == 'exhibition':
+                    text = 'It is also in the ' + parameter
+                elif key == 'creator' or key == 'person':
+                    text = 'It is also created by ' + parameter
+                return text
+
+            fulfillmentResponse = {'fulfillmentMessages': [{
+                "text": {
+                    "text": [
+                        attribute_to_text(key, parameter_name)
                     ]
                 }
+            },
+                {
+                    'payload':
+                        {
+                            "richContent": [
+                                [{
+                                    "type": "image",
+                                    "rawUrl": img,
+                                    "accessibilityText": name
+                                },
+                                    {
+                                        "type": "info",
+                                        "title": name,
+                                        "subtitle": des,
+                                        "actionLink": uri
+                                    }],
+                                [
+                                    {"type": "chips",
+                                     "options": [{'text': 'Another related entity'},
+                                                 {'text': 'Stop recommendation'}]}]
+                            ]
+                        }
+
+                }
+            ]
+            }
             return fulfillmentResponse
 # create a route for webhook
 @app.route('/webhook', methods=['GET', 'POST'])

@@ -47,75 +47,124 @@ def connection_pattern(relationship):
     pattern_list = []
     for i in relationship_dic.keys():
         if relationship_dic[i] != []:
+            # if i == 'on_MATERIAL':
+            #     text =list_to_text(relationship_dic[i])
+            #     pattern = {
+            #                         "text": {
+            #                             "text": [
+            #                                 "They both use {} as material.".format(text)
+            #                             ]
+            #                         }
+            #                     }
+            #     pattern_list.append(pattern)
+            # elif i == 'belongsto_GENRE':
+            #     text =list_to_text(relationship_dic[i])
+            #     pattern = {
+            #                         "text": {
+            #                             "text": [
+            #                                 "They both belong to the genre {}.".format(text)
+            #                             ]
+            #                         }
+            #                     }
+            #     pattern_list.append(pattern)
+            # elif i == 'has_CREATOR':
+            #     text =list_to_text(relationship_dic[i])
+            #     pattern = {
+            #                         "text": {
+            #                             "text": [
+            #                                 "They are both created by {}.".format(text)
+            #                             ]
+            #                         }
+            #                     }
+            #     pattern_list.append(pattern)
+            # elif i == 'belongsto_MOVEMENT':
+            #     text =list_to_text(relationship_dic[i])
+            #     pattern = {
+            #                         "text": {
+            #                             "text": [
+            #                                 "They both belong to the movement {}.".format(text)
+            #                             ]
+            #                         }
+            #                     }
+            #     pattern_list.append(pattern)
+            # elif i == 'has_KEYWORD':
+            #     text =list_to_text(relationship_dic[i])
+            #     pattern = {
+            #                         "text": {
+            #                             "text": [
+            #                                 "They both depict {}.".format(text)
+            #                             ]
+            #                         }
+            #                     }
+            #     pattern_list.append(pattern)
+            # elif i == 'in_COLLECTION':
+            #     text =list_to_text(relationship_dic[i])
+            #     pattern = {
+            #                         "text": {
+            #                             "text": [
+            #                                 "They are both in the {}.".format(text)
+            #                             ]
+            #                         }
+            #                     }
+            #     pattern_list.append(pattern)
+            # elif i == 'in_EXHIBITION':
+            #     text =list_to_text(relationship_dic[i])
+            #     pattern = {
+            #                         "text": {
+            #                             "text": [
+            #                                 "They are both in the {}.".format(text)
+            #                             ]
+            #                         }
+            #                     }
+            #     pattern_list.append(pattern)
             if i == 'on_MATERIAL':
                 text =list_to_text(relationship_dic[i])
                 pattern = {
-                                    "text": {
-                                        "text": [
-                                            "They both use {} as material.".format(text)
-                                        ]
-                                    }
-                                }
+                    "type": "info",
+                    "title": "They both use {} as material.".format(text)
+                }
                 pattern_list.append(pattern)
             elif i == 'belongsto_GENRE':
                 text =list_to_text(relationship_dic[i])
                 pattern = {
-                                    "text": {
-                                        "text": [
-                                            "They both belong to the genre {}.".format(text)
-                                        ]
-                                    }
-                                }
+                    "type": "info",
+                    "title": "They both belong to the genre {}.".format(text)
+                }
                 pattern_list.append(pattern)
             elif i == 'has_CREATOR':
                 text =list_to_text(relationship_dic[i])
                 pattern = {
-                                    "text": {
-                                        "text": [
-                                            "They are both created by {}.".format(text)
-                                        ]
-                                    }
-                                }
+                    "type": "info",
+                    "title": "They are both created by {}.".format(text)
+                }
                 pattern_list.append(pattern)
             elif i == 'belongsto_MOVEMENT':
                 text =list_to_text(relationship_dic[i])
                 pattern = {
-                                    "text": {
-                                        "text": [
-                                            "They both belong to the movement {}.".format(text)
-                                        ]
-                                    }
-                                }
+                    "type": "info",
+                    "title": "They both belong to the movement {}.".format(text)
+                }
                 pattern_list.append(pattern)
             elif i == 'has_KEYWORD':
                 text =list_to_text(relationship_dic[i])
                 pattern = {
-                                    "text": {
-                                        "text": [
-                                            "They both depict {}.".format(text)
-                                        ]
-                                    }
-                                }
+                    "type": "info",
+                    "title": "They both depict {}.".format(text)
+                }
                 pattern_list.append(pattern)
             elif i == 'in_COLLECTION':
                 text =list_to_text(relationship_dic[i])
                 pattern = {
-                                    "text": {
-                                        "text": [
-                                            "They are both in the {}.".format(text)
-                                        ]
-                                    }
-                                }
+                    "type": "info",
+                    "title": "They are both in the {}.".format(text)
+                }
                 pattern_list.append(pattern)
             elif i == 'in_EXHIBITION':
                 text =list_to_text(relationship_dic[i])
                 pattern = {
-                                    "text": {
-                                        "text": [
-                                            "They are both in the {}.".format(text)
-                                        ]
-                                    }
-                                }
+                    "type": "info",
+                    "title": "They are both in the {}.".format(text)
+                }
                 pattern_list.append(pattern)
     print("the dic of relation is",relationship_dic)
     return pattern_list,relationship_dic

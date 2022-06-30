@@ -135,7 +135,7 @@ class ArtGraph:
                 exhibit_in_dialog = r"http://www.wikidata.org/entity/" + exhibit_in_dialog
             sparql_for_name = "MATCH (n:Paintings) WHERE n.uri = '" + str(exhibit_in_dialog) +"' RETURN n"
             data = self.g.run(str(sparql_for_name)).data()
-            print(data)
+            # print(data)
             return data
         # elif exhibit_in_dialog in self.Paintings_title:
         #     sparql_for_name = "MATCH (n:Paintings) WHERE n.title = '" + str(exhibit_in_dialog) + "' RETURN n"
