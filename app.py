@@ -429,9 +429,9 @@ def bot4museum():
         print('parameter_list here is', parameter_list)
         if len(parameter_list) == 0:
 
-            parameter_list = handler.history[handler.history['session'].isin([session])][
+            parameter_list = handler_es.history[handler_es.history['session'].isin([session])][
                 'parameters'].to_list()
-            key_list = handler.history[handler.history['session'].isin([session])][
+            key_list = handler_es.history[handler_es.history['session'].isin([session])][
                 'parameters_dic'].to_list()
             for i, j in zip(reversed(parameter_list), reversed(key_list)):
                 print(i, j)
@@ -632,9 +632,9 @@ def bot4museum():
         print('parameter_list here is', parameter_list)
         if len(parameter_list) == 0:
 
-            parameter_list = handler.history[handler.history['session'].isin([session])][
+            parameter_list = handler_es.history[handler_es.history['session'].isin([session])][
                 'parameters'].to_list()
-            key_list = handler.history[handler.history['session'].isin([session])][
+            key_list = handler_es.history[handler_es.history['session'].isin([session])][
                 'parameters_dic'].to_list()
             for i, j in zip(reversed(parameter_list), reversed(key_list)):
                 print(i, j)
