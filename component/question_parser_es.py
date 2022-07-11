@@ -79,6 +79,12 @@ class QuestionPaser:
         # return none if no entity
         if not entities:
             return []
+        else:
+            for index,i in enumerate(entities):
+                if entities[index].startswith('Q'):
+                    entities[index] = r"http://www.wikidata.org/entity/" + entities[index]
+                elif i.endswith('exhibit'):
+                    entities[index] = str(entities[index])
         # sparql query
         sql = []
 
