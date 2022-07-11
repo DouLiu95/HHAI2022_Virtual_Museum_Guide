@@ -1,5 +1,5 @@
 from py2neo import Node, Relationship, Graph
-from component.question_classfier import *
+from component.question_classfier_es import *
 from component.question_parser_es import *
 
 import random
